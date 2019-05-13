@@ -56,6 +56,7 @@ cc.Class({
     // 将角色移动到指定坐标点
     startMoveAt: function(pos) {
         this.enabled = true;
+        this.xSpeed = 0;
         this.node.setPosition(pos);
         this.node.runAction(this.setJumpAction());  // 初始化跳跃动作
     },

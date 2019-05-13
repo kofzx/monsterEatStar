@@ -47,6 +47,11 @@ cc.Class({
             default: null,
             type: cc.Node
         },
+        // game over文本
+        gameOverDisplay: {
+            default: null,
+            type: cc.Node
+        }
     },
 
     spawnNewStar: function() {
@@ -89,12 +94,18 @@ cc.Class({
 
     gameOver: function() {
         this.player.enabled = false;
+        // 显示gameOVer
+        this.gameOverDisplay.opacity = 255;
         this.player.stopMove();
         this.startBtn.x = 0;
+        // 销毁星星节点
+        this.currentStar.destroy();
     },
     // 游戏开始按钮点击
     onGameStart () {
         this.enabled = true;
+        // 隐藏gameOVer
+        this.gameOverDisplay.opacity = 0;
         // 将角色初始到地平面上
         this.player.startMoveAt(cc.v2(0, this.groundY));
         // 隐藏按钮
@@ -105,6 +116,9 @@ cc.Class({
 
     onLoad () {
         this.enabled = false;
+        this.currentStar = null;
+        // 隐藏gameOVer
+        this.gameOverDisplay.opacity = 0;
         // 初始化计时器
         this.timer = 0;
         this.starDuration = 0;
