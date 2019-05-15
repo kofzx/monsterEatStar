@@ -136,6 +136,7 @@ cc.Class({
             this.enabled = false;
             return;
         }
+
         this.timer += dt;
     },
 });

@@ -20,6 +20,8 @@ cc.Class({
         maxMoveSpeed: 0,
         // 加速度
         accel: 0,
+        // 形变持续时间
+        shapeDuration: 0,
         // 跳跃音效资源
         jumpAudio: {
             default: null,
@@ -42,10 +44,14 @@ cc.Class({
         var jumpUp = cc.moveBy(this.jumpDuration, cc.v2(0, this.jumpHeight)).easing(cc.easeCubicActionOut());
         // 下落
         var jumpDown = cc.moveBy(this.jumpDuration, cc.v2(0, -this.jumpHeight)).easing(cc.easeCubicActionIn());
+        // 形变
+        var flatten = cc.scaleTo(this.shapeDuration, 1, 0.6);
+        var widen = cc.scaleTo(this.shapeDuration, 1, 1.2);
+        var scaleBack = cc.scaleTo(this.shapeDuration, 1, 1);
         // 添加一个回调函数，用于在动作结束时调用我们的自定方法
         var callback = cc.callFunc(this.playJumpSound, this);   // ActionInstant: callback
         // 不断重复，而且每次完成落地动作后调用回调来播放声音
-        return cc.repeatForever(cc.sequence(jumpUp, jumpDown, callback));
+        return cc.repeatForever(cc.sequence(flatten, widen, jumpUp, scaleBack, jumpDown, callback));
     },
 
     playJumpSound: function() {
@@ -92,6 +98,10 @@ cc.Class({
         this.accRight = false;
         // 主角当前水平方向速度
         this.xSpeed = 0;
+        // 边界
+        var monsterHalfWidth = this.node.width / 2;
+        this.leftBorder = -this.node.parent.width / 2 + monsterHalfWidth;
+        this.rightBorder = this.node.parent.width / 2 - monsterHalfWidth;
 
         // 初始化键盘输入监听
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
@@ -120,5 +130,14 @@ cc.Class({
 
         // 根据当前速度更新主角位置
         this.node.x += this.xSpeed * dt;
+
+        // 限制主角的移动不能超过视窗边界
+        if (this.node.x < this.leftBorder) {
+            this.node.x = this.leftBorder;
+            this.xSpeed = 0;
+        } else if (this.node.x > this.rightBorder) {
+            this.node.x = this.rightBorder;
+            this.xSpeed = 0;
+        }
     },
 });
