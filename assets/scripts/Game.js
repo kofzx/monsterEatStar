@@ -19,6 +19,11 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        // +1
+        plusOne: {
+            default: null,
+            type: cc.Prefab
+        },
         // 星星产生后消失时间的随机范围
         maxStarDuration: 0,
         minStarDuration: 0,
@@ -51,7 +56,7 @@ cc.Class({
         gameOverDisplay: {
             default: null,
             type: cc.Node
-        }
+        },
     },
 
     spawnNewStar: function() {
@@ -61,10 +66,15 @@ cc.Class({
         this.node.addChild(newStar);
         // 为星星设置一个随机位置
         newStar.setPosition(this.getNewStarPosition());
-        // newStar.getComponent('Star').game = this;
         newStar.getComponent('Star').init(this);
         this.startTimer();
         this.currentStar = newStar;
+    },
+
+    spawnNewPlusOne (pos) {
+        var newOne = cc.instantiate(this.plusOne);
+        this.node.addChild(newOne);
+        newOne.setPosition(pos);
     },
 
     startTimer () {
@@ -89,7 +99,7 @@ cc.Class({
         // 更新scoreDisplay label的文字
         this.scoreDisplay.string = 'Score: ' + this.score;
         // 播放得分音效
-        cc.audioEngine.playEffect(this.scoreAudio, false);
+        // cc.audioEngine.playEffect(this.scoreAudio, false);
     },
 
     gameOver: function() {

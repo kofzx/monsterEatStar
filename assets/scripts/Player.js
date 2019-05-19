@@ -56,7 +56,7 @@ cc.Class({
 
     playJumpSound: function() {
         // 调用声音引擎播放声音
-        cc.audioEngine.playEffect(this.jumpAudio, false);
+        // cc.audioEngine.playEffect(this.jumpAudio, false);
     },
 
     // 将角色移动到指定坐标点

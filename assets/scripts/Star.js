@@ -27,12 +27,15 @@ cc.Class({
     },
 
     onPicked: function() {
+        var pos = this.node.getPosition();
         // 当星星被收集时，调用Game脚本中的接口，生成一个新的星星
         this.game.spawnNewStar();
         // 调用Game脚本的得分方法
         this.game.gainScore();
         // 然后销毁当前星星节点
         this.node.destroy();
+        // 生成+1
+        this.game.spawnNewPlusOne(pos);
     },
 
     init (game) {
@@ -43,10 +46,6 @@ cc.Class({
 
     onLoad () {
         this.enabled = false;
-    },
-
-    start () {
-
     },
 
     update (dt) {
